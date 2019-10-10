@@ -4,10 +4,10 @@
   "regions": ["bru"],
   "builds": [
     { "src": "www/package.json", "use": "@now/next" },
-    { "src": "api/index.js", "use": "@now/node@canary" }
+    { "src": "graphql/index.js", "use": "@now/node@canary" }
   ],
   "routes": [
-    { "src": "/api", "dest": "api/index.js" },
+    { "src": "/graphql", "dest": "graphql/index.js" },
     { "src": "/(.*)", "dest": "www/$1" }
   ]
 }

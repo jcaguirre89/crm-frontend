@@ -1,7 +1,4 @@
 {
   "private": true,
-  "workspaces": [
-    "graphql",
-    "www"
-  ]
+  "workspaces": ["www", "api"]
 }

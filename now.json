@@ -1,13 +1,13 @@
 {
   "version": 2,
-  "name": "apollo-zeit",
+  "name": "crm-frontend",
   "regions": ["bru"],
   "builds": [
     { "src": "www/package.json", "use": "@now/next" },
-    { "src": "graphql/index.js", "use": "@now/node@canary" }
+    { "src": "api/index.js", "use": "@now/node@canary" }
   ],
   "routes": [
-    { "src": "/graphql", "dest": "graphql/index.js" },
+    { "src": "/api", "dest": "api/index.js" },
     { "src": "/(.*)", "dest": "www/$1" }
   ]
 }

@@ -1,23 +1,23 @@
 import fetch from 'isomorphic-unfetch';
 
 export default async (req, res) => {
-  if (!('authorization' in req.headers)) {
-    return res.status(401).send('Authorization header missing');
-  }
-
-  const auth = await req.headers.authorization;
+  const {username, password} = await req.body;
+  const data = JSON.stringify({username, password});
+  console.log('username', username, password);
+  const url = `http://localhost:8000/api-token-auth/`;
 
   try {
-    const {token} = JSON.parse(auth);
-    const url = `https://api.github.com/user/${token}`;
-
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: data,
+    });
 
     if (response.ok) {
-      const js = await response.json();
-      // Need camelcase in the frontend
-      const data = Object.assign({}, {avatarUrl: js.avatar_url}, js);
-      return res.status(200).json({data});
+      const {token} = await response.json();
+      return res.status(200).json({token});
     } else {
       // https://github.com/developit/unfetch#caveats
       const error = new Error(response.statusText);
@@ -25,6 +25,7 @@ export default async (req, res) => {
       throw error;
     }
   } catch (error) {
+    console.log('error');
     const {response} = error;
     return response
       ? res.status(response.status).json({message: response.statusText})

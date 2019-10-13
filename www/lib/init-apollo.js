@@ -1,5 +1,6 @@
-import { ApolloClient, InMemoryCache, HttpLink } from "apollo-boost";
-import fetch from "isomorphic-unfetch";
+import {ApolloClient, InMemoryCache, ApolloLink, HttpLink} from 'apollo-boost';
+import fetch from 'isomorphic-unfetch';
+import Cookies from 'js-cookie';
 
 let apolloClient = null;
 
@@ -8,20 +9,38 @@ if (!process.browser) {
   global.fetch = fetch;
 }
 
+const httpLink = new HttpLink({
+  uri:
+    process.env.NODE_ENV === 'production'
+      ? '/api'
+      : 'http://localhost:4000/api', // Server URL (must be absolute)
+});
+
+const authLink = new ApolloLink((operation, forward) => {
+  // Retrieve the authorization token from local storage.
+  // If in the server, dont try to read a cookie
+  if (!process.browser) return '';
+  const token = Cookies.get('token');
+
+  // Use the setContext method to set the HTTP headers.
+  operation.setContext({
+    headers: {
+      authorization: token ? `Token ${token}` : '',
+    },
+  });
+
+  // Call the next link in the middleware chain.
+  return forward(operation);
+});
+
 function create(initialState) {
   // Check out https://github.com/zeit/next.js/pull/4611 if you want to use the AWSAppSyncClient
   return new ApolloClient({
+    credentials: 'include',
     connectToDevTools: process.browser,
     ssrMode: !process.browser, // Disables forceFetch on the server (so queries are only run once)
-
-    link: new HttpLink({
-      uri:
-        process.env.NODE_ENV === "production"
-          ? "/api"
-          : "http://localhost:4000/api", // Server URL (must be absolute)
-      credentials: "same-origin" // Additional fetch() options like `credentials` or `headers`
-    }),
-    cache: new InMemoryCache().restore(initialState || {})
+    link: authLink.concat(httpLink),
+    cache: new InMemoryCache().restore(initialState || {}),
   });
 }
 

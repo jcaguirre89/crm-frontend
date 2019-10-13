@@ -1,31 +1,15 @@
-const { ApolloServer, gql } = require('apollo-server');
+const path = require('path');
+const {importSchema} = require('graphql-import');
+const {ApolloServer, gql} = require('apollo-server');
+const {DjangoAPI} = require('./datasource');
+const Mutation = require('./resolvers/Mutation');
+const Query = require('./resolvers/Query');
+require('dotenv').config();
 
-const books = [
-  {
-    title: 'Harry Potter and the Chamber of Secrets',
-    author: 'J.K. Rowling',
-  },
-  {
-    title: 'Jurassic Park',
-    author: 'Michael Crichton',
-  },
-];
-
-const typeDefs = gql`
-  type Book {
-    title: String
-    author: String
-  }
-
-  type Query {
-    books: [Book]
-  }
-`;
+const typeDefs = importSchema(path.resolve('schema.graphql'));
 
 const resolvers = {
-  Query: {
-    books: () => books,
-  },
+  Query,
 };
 
 const server = new ApolloServer({
@@ -33,9 +17,22 @@ const server = new ApolloServer({
   resolvers,
   introspection: true,
   playground: true,
+  dataSources: () => {
+    return {
+      djangoAPI: new DjangoAPI(),
+    };
+  },
+  context: ({req}) => {
+    // Add token coming from Apollo Client so RestDataSource can pass it to Django
+    const token = req.headers.authorization || '';
+    return {
+      token,
+      env: process.env.ENVIRONMENT,
+    };
+  },
 });
 
 // The `listen` method launches a web server.
-server.listen().then(({ url }) => {
+server.listen().then(({url}) => {
   console.log(`🚀  Server ready at ${url}`);
 });

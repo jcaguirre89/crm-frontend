@@ -1,5 +1,6 @@
 import React from 'react';
 import CompanyList from '../components/CompanyList';
+import {withAuthSync} from '../utils/auth';
 
 const Companies = () => (
   <div>
@@ -8,4 +9,4 @@ const Companies = () => (
   </div>
 );
 
-export default Companies
+export default withAuthSync(Companies);

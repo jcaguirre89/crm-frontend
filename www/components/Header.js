@@ -1,23 +1,9 @@
 import React, { useEffect } from 'react';
-import styled from 'styled-components';
 import Link from 'next/link';
 import Router from 'next/router';
 import NProgress from 'nprogress';
+import Nav from './Nav'
 
-const Logo = styled.h1`
-  font-size: 4rem;
-  margin-left: 2rem;
-  position: relative;
-  z-index: 2;
-  a {
-    text-transform: uppercase;
-    text-decoration: none;
-  }
-  @media (max-width: 900px) {
-    margin: 0;
-    text-align: center;
-  }
-`;
 
 export default function Header() {
   // Display loading html on route changes
@@ -34,10 +20,6 @@ export default function Header() {
   }, []);
 
   return (
-    <Logo>
-      <Link href="/">
-        <a>Home</a>
-      </Link>
-    </Logo>
+    <Nav />
   );
 }

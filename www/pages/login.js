@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import fetch from 'isomorphic-unfetch';
-import {login} from '../utils/auth';
+import { login } from '../utils/auth';
 
 function Login(props) {
   const [userData, setUserData] = useState({
@@ -16,39 +16,39 @@ function Login(props) {
       error: '',
     });
 
-    const {username, password} = userData;
+    const { username, password } = userData;
     const url = `${props.apiUrl}/api-token-auth/`;
 
     try {
       const response = await fetch(url, {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         cors: 'cors',
-        body: JSON.stringify({username, password}),
+        body: JSON.stringify({ username, password }),
       });
       if (response.status === 200) {
         const responseData = await response.json();
-        const {token} = responseData;
-        await login({token});
+        const { token } = responseData;
+        await login({ token });
       } else {
         console.log('Login failed.');
         const responseData = await response.json();
-        console.log(responseData)
+        console.log(responseData);
         // https://github.com/developit/unfetch#caveats
-        let error = new Error(JSON.stringify(responseData));
+        const error = new Error(JSON.stringify(responseData));
         error.response = response;
         throw error;
       }
     } catch (error) {
       console.error(
         'You have an error in your code or there are Network issues.',
-        error,
+        error
       );
 
-      const {response, message} = error;
+      const { response, message } = error;
       setUserData({
         ...userData,
-        error: message ? message : response.statusText,
+        error: message || response.statusText,
       });
     }
   }
@@ -119,13 +119,13 @@ function Login(props) {
   );
 }
 
-Login.getInitialProps = async ({req}) => {
+Login.getInitialProps = async ({ req }) => {
   const apiUrl =
     process.env.NODE_ENV === 'development'
       ? `http://localhost:8000`
       : `https://${req.headers.host}`;
 
-  return {apiUrl};
+  return { apiUrl };
 };
 
 export default Login;

@@ -1,22 +1,31 @@
-import {useEffect} from 'react';
+import { useEffect } from 'react';
 import Router from 'next/router';
 import nextCookie from 'next-cookies';
 import cookie from 'js-cookie';
+import getHost from './get-host';
 
-export const login = ({token}) => {
-  cookie.set('token', token, {expires: 1});
+export const login = ({ token }) => {
+  cookie.set('token', token, { expires: 1 });
   Router.push('/');
 };
 
-export const auth = ctx => {
-  const {token} = nextCookie(ctx);
+export const logout = () => {
+  cookie.remove('token');
+  // to support logging out from all windows
+  window.localStorage.setItem('logout', Date.now());
+  Router.push('/login');
+};
+
+export const auth = async ctx => {
+  /* Ran in getInitialProps in Components to get the token in the server or client */
+  const { token } = nextCookie(ctx);
 
   /*
    * If `ctx.req` is available it means we are on the server.
    * Additionally if there's no token it means the user is not logged in.
    */
   if (ctx.req && !token) {
-    ctx.res.writeHead(302, {Location: '/login'});
+    ctx.res.writeHead(302, { Location: '/login' });
     ctx.res.end();
   }
 
@@ -25,14 +34,35 @@ export const auth = ctx => {
     Router.push('/login');
   }
 
-  return token;
-};
+  // Check the server
+  const apiUrl = `${getHost(ctx.req)}/auth/check-login/`;
+  console.log('url', apiUrl);
 
-export const logout = () => {
-  cookie.remove('token');
-  // to support logging out from all windows
-  window.localStorage.setItem('logout', Date.now());
-  Router.push('/login');
+  const redirectOnError = () =>
+    typeof window !== 'undefined'
+      ? Router.push('/login')
+      : ctx.res.writeHead(302, { Location: '/login' }).end();
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(token),
+    });
+
+    if (response.ok) {
+      const authenticated = await response.json();
+      return authenticated;
+    }
+    return await redirectOnError();
+  } catch (error) {
+    // Implementation or Network Error
+    return redirectOnError();
+  }
+
+  // return token;
 };
 
 export const withAuthSync = WrappedComponent => {
@@ -44,6 +74,8 @@ export const withAuthSync = WrappedComponent => {
       }
     };
 
+    // use apollo instead of going directly to django to check auth
+
     useEffect(() => {
       window.addEventListener('storage', syncLogout);
 
@@ -51,19 +83,19 @@ export const withAuthSync = WrappedComponent => {
         window.removeEventListener('storage', syncLogout);
         window.localStorage.removeItem('logout');
       };
-    }, [null]);
+    }, []);
 
     return <WrappedComponent {...props} />;
   };
 
   Wrapper.getInitialProps = async ctx => {
-    const token = auth(ctx);
+    const authenticated = auth(ctx);
 
     const componentProps =
       WrappedComponent.getInitialProps &&
       (await WrappedComponent.getInitialProps(ctx));
 
-    return {...componentProps, token};
+    return { ...componentProps, authenticated };
   };
 
   return Wrapper;

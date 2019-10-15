@@ -36,7 +36,6 @@ export const auth = async ctx => {
 
   // Check the server
   const apiUrl = `${getHost(ctx.req)}/auth/check-login/`;
-  console.log('url', apiUrl);
 
   const redirectOnError = () =>
     typeof window !== 'undefined'
@@ -53,16 +52,14 @@ export const auth = async ctx => {
     });
 
     if (response.ok) {
-      const authenticated = await response.json();
-      return authenticated;
+      // const authenticated = await response.json();
+      return token;
     }
     return await redirectOnError();
   } catch (error) {
     // Implementation or Network Error
     return redirectOnError();
   }
-
-  // return token;
 };
 
 export const withAuthSync = WrappedComponent => {
@@ -89,13 +86,14 @@ export const withAuthSync = WrappedComponent => {
   };
 
   Wrapper.getInitialProps = async ctx => {
-    const authenticated = auth(ctx);
+    // Every wrapped page (auth locked) will have the token as prop
+    const token = auth(ctx);
 
     const componentProps =
       WrappedComponent.getInitialProps &&
       (await WrappedComponent.getInitialProps(ctx));
 
-    return { ...componentProps, authenticated };
+    return { ...componentProps, token };
   };
 
   return Wrapper;

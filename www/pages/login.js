@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
-import fetch from 'isomorphic-unfetch';
-import { login } from '../utils/auth';
+import React from 'react';
 import Login from '../components/Login';
 
 function LoginPage(props) {

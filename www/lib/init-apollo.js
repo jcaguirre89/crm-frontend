@@ -1,4 +1,9 @@
-import {ApolloClient, InMemoryCache, ApolloLink, HttpLink} from 'apollo-boost';
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloLink,
+  HttpLink,
+} from 'apollo-boost';
 import fetch from 'isomorphic-unfetch';
 import Cookies from 'js-cookie';
 

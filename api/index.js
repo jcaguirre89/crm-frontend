@@ -1,6 +1,6 @@
 const path = require('path');
 const { importSchema } = require('graphql-import');
-const { ApolloServer, gql } = require('apollo-server');
+const { ApolloServer } = require('apollo-server');
 const { DjangoAPI } = require('./datasource');
 const Mutation = require('./resolvers/Mutation');
 const Query = require('./resolvers/Query');
@@ -19,8 +19,8 @@ const server = new ApolloServer({
   introspection: true,
   playground: true,
   dataSources: () => ({
-      djangoAPI: new DjangoAPI(),
-    }),
+    djangoAPI: new DjangoAPI(),
+  }),
   context: ({ req }) => {
     // Add token coming from Apollo Client so RestDataSource can pass it to Django
     const token = req.headers.authorization || '';

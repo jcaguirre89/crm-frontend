@@ -3,8 +3,7 @@ import { getDataFromTree } from '@apollo/react-ssr';
 import Head from 'next/head';
 import initApollo from './init-apollo';
 
-export default App => {
-  return class Apollo extends React.Component {
+export default App => class Apollo extends React.Component {
     static displayName = 'withApollo(App)';
 
     static async getInitialProps(ctx) {
@@ -59,4 +58,3 @@ export default App => {
       return <App {...this.props} apolloClient={this.apolloClient} />;
     }
   };
-};

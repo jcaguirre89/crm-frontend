@@ -1,72 +1,75 @@
 type Query {
   company(companyId: Int!): Company!
   companies: [Company!]!
+}
 
+type Mutation {
+  hello: String
 }
 
 type User {
-	id: ID!
-	firstName: String
-	lastName: String
-	email: String!
+  id: ID!
+  firstName: String
+  lastName: String
+  email: String!
 }
 
 type Company {
-	id: ID!
-	name: String!
-	country: String!
-	industry: String
-	deals: [Deal!]
-	contacts: [Contact!]
+  id: ID!
+  name: String!
+  country: String!
+  industry: String
+  deals: [Deal!]
+  contacts: [Contact!]
 }
 
 type Deal {
-	id: ID!
-	status: String
-	ledBy: User
-	sector: String
-	country: String
-	amount: Float!
-	company: Company!
-	notes: [DealNote!]
-	files: [DealFile!]
+  id: ID!
+  status: String
+  ledBy: User
+  sector: String
+  country: String
+  amount: Float!
+  company: Company!
+  notes: [DealNote!]
+  files: [DealFile!]
 }
 
 type Note {
-	id: ID!
-	createdBy: User!
-	title: String
-	content: String!
+  id: ID!
+  createdBy: User!
+  title: String
+  content: String!
 }
 
 type DealNote {
-	deal: Deal!
+  deal: Deal!
 }
 
 type ContactNote {
-	contact: Contact!
+  contact: Contact!
 }
 
 type Contact {
-	id: ID!
-	firstName: String!
-	lastName: String!
-	email: String
-	notes: [ContactNote!]
-	files: [ContactFile!]
+  id: ID!
+  firstName: String!
+  lastName: String!
+  email: String
+  notes: [ContactNote!]
+  files: [ContactFile!]
 }
 
 type File {
-	id: ID!
-	title: String
-	description: String
-	uploadedBy: User!
+  id: ID!
+  title: String
+  description: String
+  uploadedBy: User!
 }
 
 type DealFile {
-	deal: Deal!
+  deal: Deal!
 }
 
 type ContactFile {
-	contact: Contact!
+  contact: Contact!
 }

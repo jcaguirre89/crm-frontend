@@ -1,4 +1,4 @@
-const {RESTDataSource, HTTPCache} = require('apollo-datasource-rest');
+const { RESTDataSource, HTTPCache } = require('apollo-datasource-rest');
 
 class DjangoAPI extends RESTDataSource {
   constructor() {
@@ -13,17 +13,17 @@ class DjangoAPI extends RESTDataSource {
 
   get baseURL() {
     if (this.context.env === 'development') {
-      return 'http://localhost:8000/api/v1/';
+      return 'http://localhost:8000/';
     }
     return 'https://movies-api.example.com/';
   }
 
   async getCompanies() {
-    return this.get(`companies`);
+    return this.get(`api/v1/companies`);
   }
 
   async getCompany(id) {
-    const data = await this.get(`companies/${id}`);
+    const data = await this.get(`api/v1/companies/${id}`);
     return data;
   }
 }

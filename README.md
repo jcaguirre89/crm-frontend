@@ -18,3 +18,20 @@ yarn workspace api run dev
 yarn workspace www install
 yarn workspace www run dev
 ```
+
+# Auth
+To use the GraphQL Playground, you must first get a token for your user. This is currently not possible
+from GraphQL directly because I haven't coded the mutations, so you must do it directly from the django app
+by going to the django admin and creating a token, or by sending a POST request using something like `curl` or Postman
+to `localhost:8000/api-token-auth` with the username and password in the body:
+
+```
+curl -X POST \
+  http://localhost:8000/api-token-auth/ \
+  -H 'Content-Type: application/json' \
+  -H 'Host: localhost:8000' \
+  -d '{
+	"username": "admin@admin.com",
+	"password": "myadminpassword"
+}'
+```

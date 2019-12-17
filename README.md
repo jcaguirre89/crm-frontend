@@ -1,6 +1,6 @@
 [WIP]
 
-#About
+# About
 This is a Next.js front end to a Django REST app that runs a CRM for deal
 flow management ([repo](https://github.com/jcaguirre89/crm-backend)). This backend includes
 auth and the deal models, and the app won't run without it.

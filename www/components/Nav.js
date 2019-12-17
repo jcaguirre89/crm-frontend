@@ -74,8 +74,8 @@ function Nav() {
       <Link href="/">
         <a>Home</a>
       </Link>
-      <Link href="/companies">
-        <a>Companies</a>
+      <Link href="/deals">
+        <a>Deals</a>
       </Link>
       <Link href="/login">
         <a>Login</a>

@@ -1,6 +1,6 @@
 type Query {
-  company(companyId: Int!): Company!
-  companies: [Company!]!
+  deal(dealId: Int!): Deal!
+  deals: [Deal!]!
 }
 
 type Mutation {
@@ -14,23 +14,17 @@ type User {
   email: String!
 }
 
-type Company {
-  id: ID!
-  name: String!
-  country: String!
-  industry: String
-  deals: [Deal!]
-  contacts: [Contact!]
-}
-
 type Deal {
   id: ID!
-  status: String
-  ledBy: User
-  sector: String
+  name: String!
+  description: String
   country: String
-  amount: Float!
-  company: Company!
+  sector: String
+  industry: String
+  status: String
+  leadIC: String
+  rejectionReason: String
+  ledBy: User!
   notes: [DealNote!]
   files: [DealFile!]
 }

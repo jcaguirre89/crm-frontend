@@ -3,24 +3,24 @@ import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import styled from 'styled-components';
 
-const GET_COMPANIES = gql`
-  query GET_COMPANIES {
-    companies {
+const GET_DEALS = gql`
+  query GET_DEALS {
+    deals {
       id
       name
     }
   }
 `;
 
-function CompanyList(props) {
-  const { loading, error, data } = useQuery(GET_COMPANIES);
+function DealList(props) {
+  const { loading, error, data } = useQuery(GET_DEALS);
   if (loading) return <span>Loading...</span>;
   if (error) return <span>Error</span>;
   return (
     data &&
-    data.companies &&
-    data.companies.map(company => <div key={company.id}>{company.name}</div>)
+    data.deals &&
+    data.deals.map(deal => <div key={deal.id}>{deal.name}</div>)
   );
 }
 
-export default CompanyList;
+export default DealList;

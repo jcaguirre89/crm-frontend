@@ -24,7 +24,7 @@ const Grid = styled.div`
   display: grid;
   width: 100%;
   border: 1px solid goldenrod;
-  grid-template-columns: 300px 1fr;
+  grid-template-columns: 1fr;
   height: 100vh;
   ${({ theme }) => theme.tablet`
       grid-template-columns: 1fr;

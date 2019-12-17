@@ -15,15 +15,15 @@ class DjangoAPI extends RESTDataSource {
     if (this.context.env === 'development') {
       return 'http://localhost:8000/';
     }
-    return 'https://movies-api.example.com/';
+    return 'https://api.example.com/';
   }
 
-  async getCompanies() {
-    return this.get(`api/v1/companies`);
+  async getDeals() {
+    return this.get(`api/v1/deals`);
   }
 
-  async getCompany(id) {
-    const data = await this.get(`api/v1/companies/${id}`);
+  async getDeal(id) {
+    const data = await this.get(`api/v1/deals/${id}`);
     return data;
   }
 }

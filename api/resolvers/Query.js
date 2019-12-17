@@ -1,11 +1,11 @@
 const Query = {
-  company: async (parent, {companyId}, {dataSources}) => {
-    const company = await dataSources.djangoAPI.getCompany(companyId);
-    return company;
+  deal: async (parent, {dealId}, {dataSources}) => {
+    const deal = await dataSources.djangoAPI.getDeal(dealId);
+    return deal;
   },
-  companies: async (parent, args, {dataSources}) => {
-    const companies = await dataSources.djangoAPI.getCompanies();
-    return companies;
+  deals: async (parent, args, {dataSources}) => {
+    const deals = await dataSources.djangoAPI.getDeals();
+    return deals;
   },
 };
 

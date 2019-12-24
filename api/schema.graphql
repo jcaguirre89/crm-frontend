@@ -4,7 +4,7 @@ type Query {
 }
 
 type Mutation {
-  hello: String
+  createDeal(name: String!, description: String): Deal
 }
 
 type User {
@@ -24,7 +24,7 @@ type Deal {
   status: String
   leadIC: String
   rejectionReason: String
-  ledBy: User!
+  ledBy: User
   notes: [DealNote!]
   files: [DealFile!]
 }
